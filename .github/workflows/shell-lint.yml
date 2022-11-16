@@ -1,0 +1,40 @@
+name: Shell Lint
+
+on:
+  workflow_call:
+    inputs:
+      shellcheck:
+        required: false
+        default: true
+        type: boolean
+      shfmt:
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  shellcheck:
+    if: ${{ inputs.shellcheck }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install ShellCheck
+        run: sudo apt-get install shellcheck
+
+      - name: Check files
+        run: shellcheck *.sh
+
+  shfmt:
+    if: ${{ inputs.shfmt }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install shfmt
+        run: sudo snap install shfmt
+
+      - name: Check files
+        run: shfmt -d .
