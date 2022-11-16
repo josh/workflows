@@ -26,7 +26,7 @@ jobs:
           python -m pip install black isort
 
       - name: Lint with isort
-        if: inputs.isort
+        if: ${{ inputs.isort }}
         run: |
           isort --profile black --check --diff .
 
@@ -36,7 +36,7 @@ jobs:
 
   isort:
     runs-on: ubuntu-latest
-    if: inputs.isort
+    if: ${{ inputs.isort }}
 
     steps:
       - uses: actions/checkout@v3
