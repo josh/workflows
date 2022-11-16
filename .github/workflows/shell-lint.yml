@@ -29,13 +29,14 @@ jobs:
   shfmt:
     if: ${{ inputs.shfmt }}
     runs-on: ubuntu-latest
-    timeout-minutes: 1
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Install shfmt
-        run: sudo snap install shfmt
+        run: |
+          wget -O shfmt https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64
+          chmod +x shfmt
 
       - name: Check files
-        run: shfmt -d .
+        run: ./shfmt -d .
