@@ -14,11 +14,31 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pyyaml
 
+      - name: Install Prettier
+        run: npm install --global prettier
+
+      - name: Install shfmt
+        run: |
+          wget -O shfmt https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64
+          chmod +x shfmt
+
+      - name: Install ShellCheck
+        run: sudo apt-get install shellcheck
+
+      - name: Lint with prettier
+        run: prettier --check ".github/workflows/*.yml"
+
       - name: Dump workflow commands to scripts
         run: |
           python dump_workflow_scripts.py ".github/workflows" "$RUNNER_TEMP/workflows"
+
+      - name: Lint with shfmt
+        run: ./shfmt --diff "$RUNNER_TEMP/workflows"
+
+      - name: Lint with ShellCheck
+        run: shellcheck $(find "$RUNNER_TEMP/workflows" -type f)
