@@ -40,7 +40,6 @@ jobs:
         shell: python
         run: |
           import os
-          import shutil
           import sys
 
           import yaml
@@ -62,8 +61,6 @@ jobs:
 
           input_path = ".github/workflows"
           output_path = os.environ["RUNNER_TEMP"] + "/workflows"
-
-          shutil.rmtree(output_path, ignore_errors=True)
 
           output = open(os.environ["GITHUB_OUTPUT"], "w")
 
