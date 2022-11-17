@@ -63,6 +63,8 @@ jobs:
           gh release download --repo mvdan/sh --pattern 'shfmt_v*_linux_amd64'
           mv shfmt_v*_linux_amd64 shfmt
           chmod +x shfmt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install ShellCheck
         if: ${{ inputs.shellcheck }}
