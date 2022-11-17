@@ -60,9 +60,8 @@ jobs:
               "python": "py",
           }
 
-
-          input_path = sys.argv[1]
-          output_path = sys.argv[2]
+          input_path = ".github/workflows"
+          output_path = os.environ["RUNNER_TEMP"] + "/workflows"
 
           shutil.rmtree(output_path, ignore_errors=True)
 
