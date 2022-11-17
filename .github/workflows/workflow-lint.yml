@@ -61,7 +61,7 @@ jobs:
         if: ${{ inputs.shfmt }}
         run: |
           curl --silent https://api.github.com/repos/mvdan/sh/releases/latest | \
-            jq --raw-output '.assets[] | select(.name| test("shfmt_v.*_linux_amd64")) | .browser_download_url' \
+            jq --raw-output '.assets[] | select(.name| test("shfmt_v.*_linux_amd64")) | .browser_download_url' | \
             wget --quiet -O shfmt --input-file=-
           chmod +x shfmt
 
