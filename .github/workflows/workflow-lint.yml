@@ -70,9 +70,6 @@ jobs:
               with open(f"{input_path}/{workflow_filename}", "r") as f:
                   workflow = yaml.safe_load(f)
 
-              if not workflow:
-                  continue
-
               for job_id, job in workflow.get("jobs", []).items():
                   job_dirname = f"{output_path}/{workflow_id}/{job_id}"
                   os.makedirs(job_dirname, exist_ok=True)
