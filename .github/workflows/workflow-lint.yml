@@ -119,7 +119,7 @@ jobs:
 
       - name: Lint with ShellCheck
         run: |
-          read -a args <<< "$FILES"
+          read -a args <<<"$FILES"
           shellcheck "${args[@]}"
         env:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
