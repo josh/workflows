@@ -101,7 +101,7 @@ jobs:
 
                       filename = f"{job_dirname}/{step_id}.{extension}"
 
-                      print(filename )
+                      print(filename)
                       output.write(filename + "\n")
                       with open(filename, "w") as f:
                           f.write(f"{shebang}\n")
