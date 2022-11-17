@@ -60,10 +60,10 @@ jobs:
       - name: Install shfmt
         if: ${{ inputs.shfmt }}
         run: |
-          wget -O shfmt https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64
+          curl --silent https://api.github.com/repos/mvdan/sh/releases/latest | \
+            jq --raw-output '.assets[] | select(.name| test("shfmt_v.*_linux_amd64")) | .browser_download_url' \
+            wget --quiet -O shfmt --input-file=-
           chmod +x shfmt
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install ShellCheck
         if: ${{ inputs.shellcheck }}
