@@ -48,6 +48,6 @@ jobs:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
 
       - name: Lint with ShellCheck
-        run: shellcheck $FILES
+        run: shellcheck "${FILES[@]}"
         env:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
