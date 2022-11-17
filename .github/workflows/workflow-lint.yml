@@ -109,7 +109,7 @@ jobs:
 
       - name: Lint with ShellCheck
         run: |
-          find "$RUNNER_TEMP/workflows" -type f \( -name '*.sh' -o -name '*.bash' \) | xargs shellcheck
+          find "$RUNNER_TEMP/workflows" -type f \( -name '*.sh' -o -name '*.bash' \) -exec shellcheck {} +
 
       - name: Lint with black
         run: |
