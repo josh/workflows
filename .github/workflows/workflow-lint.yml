@@ -128,7 +128,7 @@ jobs:
       - name: Lint with shfmt
         if: ${{ inputs.shfmt }}
         run: |
-          ./shfmt --diff "$RUNNER_TEMP/workflows"
+          ./shfmt --indent 2 --diff "$RUNNER_TEMP/workflows"
 
       - name: Lint with ShellCheck
         if: ${{ inputs.shellcheck }}
