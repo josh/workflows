@@ -43,11 +43,19 @@ jobs:
           echo "EOF" >>"$GITHUB_OUTPUT"
 
       - name: Lint with shfmt
-        run: ./shfmt --diff $FILES
+        run: |
+          shfmt_() {
+            ./shfmt --diff "$@"
+          }
+          shfmt_ "$FILES"
         env:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
 
       - name: Lint with ShellCheck
-        run: shellcheck "${FILES[@]}"
+        run: |
+          shellcheck_() {
+            shellcheck "$@"
+          }
+          shellcheck_ "$FILES"
         env:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
