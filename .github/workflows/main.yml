@@ -1,6 +1,8 @@
 name: Main
 
-on: [push]
+on:
+  push:
+    paths: ".github/workflows/**.yml"
 
 jobs:
   lint:
