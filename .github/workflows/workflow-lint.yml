@@ -38,9 +38,7 @@ jobs:
       - name: Dump workflow commands to scripts
         id: dump_workflow_scripts
         run: |
-          echo "files<<EOF" >>"$GITHUB_OUTPUT"
           python dump_workflow_scripts.py ".github/workflows" "$RUNNER_TEMP/workflows" | tee -a "$GITHUB_OUTPUT"
-          echo "EOF" >>"$GITHUB_OUTPUT"
 
       - name: Lint with shfmt
         run: |

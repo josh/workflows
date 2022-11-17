@@ -25,6 +25,8 @@ output_path = sys.argv[2]
 
 shutil.rmtree(output_path, ignore_errors=True)
 
+print("files<<EOF")
+
 for workflow_filename in os.listdir(input_path):
     if not workflow_filename.endswith(".yml"):
         continue
@@ -66,3 +68,5 @@ for workflow_filename in os.listdir(input_path):
                 f.write(script)
                 if not script.endswith("\n"):
                     f.write("\n")
+
+print("EOF")
