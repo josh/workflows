@@ -96,9 +96,9 @@ jobs:
                       script = step.get("run")
 
                       filename = f"{job_dirname}/{step_id}.{extension}"
-
                       print(filename)
                       output.write(filename + "\n")
+
                       with open(filename, "w") as f:
                           f.write(f"{shebang}\n")
                           if name:
