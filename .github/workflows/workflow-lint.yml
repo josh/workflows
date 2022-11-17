@@ -40,7 +40,6 @@ jobs:
         shell: python
         run: |
           import os
-          import sys
 
           import yaml
 
