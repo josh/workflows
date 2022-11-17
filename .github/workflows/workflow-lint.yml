@@ -43,7 +43,9 @@ jobs:
           echo "EOF" >>"$GITHUB_OUTPUT"
 
       - name: Lint with shfmt
-        run: ./shfmt --diff "$RUNNER_TEMP/workflows"
+        run: ./shfmt --diff $PATHS
+        env:
+          PATHS: ${{ steps.dump_workflow_scripts.outputs.paths }}
 
       - name: Lint with ShellCheck
         run: shellcheck $PATHS
