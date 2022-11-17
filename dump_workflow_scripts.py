@@ -2,7 +2,7 @@ import os
 import shutil
 import sys
 
-import yaml  # pyyaml
+import yaml
 
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
 SHEBANGS = {
