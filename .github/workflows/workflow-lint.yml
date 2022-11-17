@@ -27,6 +27,10 @@ on:
         required: false
         default: true
         type: boolean
+      flake8:
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   prettier:
@@ -138,7 +142,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install pyyaml black
+          pip install pyyaml black flake8
 
       - name: Dump workflow commands to scripts
         id: dump_workflow_scripts
@@ -187,3 +191,8 @@ jobs:
         if: ${{ inputs.black }}
         run: |
           black --check --diff "$RUNNER_TEMP/workflows"
+
+      - name: Lint with flake8
+        if: ${{ inputs.flake8 }}
+        run: |
+          flake8 "$RUNNER_TEMP/workflows" --count --show-source --statistics
