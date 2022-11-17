@@ -64,3 +64,5 @@ for workflow_filename in os.listdir(input_path):
                     f.write(f"# name: {name}\n")
                 f.write("\n")
                 f.write(script)
+                if not script.endswith("\n"):
+                    f.write("\n")
