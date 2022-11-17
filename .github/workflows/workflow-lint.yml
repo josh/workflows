@@ -17,7 +17,7 @@ jobs:
       - name: Lint with prettier
         run: prettier --check ".github/workflows/*.yml"
 
-  lint:
+  lint-run:
     runs-on: ubuntu-latest
 
     steps:
