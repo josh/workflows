@@ -43,13 +43,15 @@ jobs:
           echo "EOF" >>"$GITHUB_OUTPUT"
 
       - name: Lint with shfmt
-        run: ./shfmt --diff $FILES
+        run: |
+          read -a args <<< "$FILES"
+          ./shfmt --diff "${args[@]}"
         env:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
 
       - name: Lint with ShellCheck
         run: |
-          args=($FILES)
+          read -a args <<< "$FILES"
           shellcheck "${args[@]}"
         env:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
