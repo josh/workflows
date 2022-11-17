@@ -1,4 +1,4 @@
-name: workflow-lint
+name: Workflow Lint
 
 on: push
 
