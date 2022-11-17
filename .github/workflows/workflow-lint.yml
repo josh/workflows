@@ -76,14 +76,12 @@ jobs:
               "null": "#!/bin/bash -e",
               "bash": "#!/bin/bash -eo pipefail",
               "sh": "#!/bin/sh -e",
-              "python": "#!/usr/bin/env python",
           }
 
           EXTENSIONS = {
               "null": "bash",
               "bash": "bash",
               "sh": "sh",
-              "python": "py",
           }
 
           input_path = ".github/workflows"
@@ -157,21 +155,6 @@ jobs:
 
           import yaml
 
-          # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
-          SHEBANGS = {
-              "null": "#!/bin/bash -e",
-              "bash": "#!/bin/bash -eo pipefail",
-              "sh": "#!/bin/sh -e",
-              "python": "#!/usr/bin/env python",
-          }
-
-          EXTENSIONS = {
-              "null": "bash",
-              "bash": "bash",
-              "sh": "sh",
-              "python": "py",
-          }
-
           input_path = ".github/workflows"
           output_path = os.environ["RUNNER_TEMP"] + "/workflows"
 
@@ -191,27 +174,19 @@ jobs:
                   for idx, step in enumerate(job.get("steps", [])):
                       if "run" not in step:
                           continue
-
-                      shell = step.get("shell", "null")
-                      if shell not in SHEBANGS:
+                      if step.get("shell") != "python":
                           continue
 
-                      shebang = SHEBANGS[shell]
-                      extension = EXTENSIONS[shell]
                       step_id = step.get("id", f"__run_{idx}")
-                      name = step.get("name")
-                      script = step.get("run")
-
-                      filename = f"{job_dirname}/{step_id}.{extension}"
+                      filename = f"{job_dirname}/{step_id}.py"
                       print(filename)
 
                       with open(filename, "w") as f:
-                          f.write(f"{shebang}\n")
-                          if name:
-                              f.write(f"# name: {name}\n")
+                          if "name" in step:
+                              f.write(f"# name: {step["name"]}\n")
                           f.write("\n")
-                          f.write(script)
-                          if not script.endswith("\n"):
+                          f.write(step["run"])
+                          if not step["run"].endswith("\n"):
                               f.write("\n")
 
       - name: Lint with black
