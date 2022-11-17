@@ -3,9 +3,35 @@ name: Workflow Lint
 on:
   push:
   workflow_call:
+    inputs:
+      prettier:
+        required: false
+        default: true
+        type: boolean
+      shlint:
+        required: false
+        default: true
+        type: boolean
+      shfmt:
+        required: false
+        default: true
+        type: boolean
+      shellcheck:
+        required: false
+        default: true
+        type: boolean
+      pylint:
+        required: false
+        default: true
+        type: boolean
+      black:
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   prettier:
+    if: ${{ inputs.prettier }}
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +43,8 @@ jobs:
       - name: Lint with prettier
         run: prettier --check ".github/workflows/*.yml"
 
-  lint-run:
+  shlint:
+    if: ${{ inputs.shlint }}
     runs-on: ubuntu-latest
 
     steps:
@@ -25,14 +52,16 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install pyyaml black
+          pip install pyyaml
 
       - name: Install shfmt
+        if: ${{ inputs.shfmt }}
         run: |
           wget -O shfmt https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64
           chmod +x shfmt
 
       - name: Install ShellCheck
+        if: ${{ inputs.shellcheck }}
         run: sudo apt-get install shellcheck
 
       - name: Dump workflow commands to scripts
@@ -101,13 +130,92 @@ jobs:
                               f.write("\n")
 
       - name: Lint with shfmt
+        if: ${{ inputs.shfmt }}
         run: |
           ./shfmt --diff "$RUNNER_TEMP/workflows"
 
       - name: Lint with ShellCheck
+        if: ${{ inputs.shellcheck }}
         run: |
           find "$RUNNER_TEMP/workflows" -type f \( -name '*.sh' -o -name '*.bash' \) -exec shellcheck {} +
 
+  pylint:
+    if: ${{ inputs.pylint }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Python dependencies
+        run: |
+          pip install pyyaml black
+
+      - name: Dump workflow commands to scripts
+        id: dump_workflow_scripts
+        shell: python
+        run: |
+          import os
+
+          import yaml
+
+          # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+          SHEBANGS = {
+              "null": "#!/bin/bash -e",
+              "bash": "#!/bin/bash -eo pipefail",
+              "sh": "#!/bin/sh -e",
+              "python": "#!/usr/bin/env python",
+          }
+
+          EXTENSIONS = {
+              "null": "bash",
+              "bash": "bash",
+              "sh": "sh",
+              "python": "py",
+          }
+
+          input_path = ".github/workflows"
+          output_path = os.environ["RUNNER_TEMP"] + "/workflows"
+
+          for workflow_filename in os.listdir(input_path):
+              if not workflow_filename.endswith(".yml"):
+                  continue
+
+              workflow_id = os.path.basename(workflow_filename).replace(".yml", "")
+
+              with open(f"{input_path}/{workflow_filename}", "r") as f:
+                  workflow = yaml.safe_load(f)
+
+              for job_id, job in workflow.get("jobs", []).items():
+                  job_dirname = f"{output_path}/{workflow_id}/{job_id}"
+                  os.makedirs(job_dirname, exist_ok=True)
+
+                  for idx, step in enumerate(job.get("steps", [])):
+                      if "run" not in step:
+                          continue
+
+                      shell = step.get("shell", "null")
+                      if shell not in SHEBANGS:
+                          continue
+
+                      shebang = SHEBANGS[shell]
+                      extension = EXTENSIONS[shell]
+                      step_id = step.get("id", f"__run_{idx}")
+                      name = step.get("name")
+                      script = step.get("run")
+
+                      filename = f"{job_dirname}/{step_id}.{extension}"
+                      print(filename)
+
+                      with open(filename, "w") as f:
+                          f.write(f"{shebang}\n")
+                          if name:
+                              f.write(f"# name: {name}\n")
+                          f.write("\n")
+                          f.write(script)
+                          if not script.endswith("\n"):
+                              f.write("\n")
+
       - name: Lint with black
+        if: ${{ inputs.black }}
         run: |
           black --check --diff "$RUNNER_TEMP/workflows"
