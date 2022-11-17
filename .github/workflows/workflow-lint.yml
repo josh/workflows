@@ -183,7 +183,8 @@ jobs:
 
                       with open(filename, "w") as f:
                           if "name" in step:
-                              f.write(f"# name: {step["name"]}\n")
+                              name = step["name"]
+                              f.write(f"# name: {name}\n")
                           f.write("\n")
                           f.write(step["run"])
                           if not step["run"].endswith("\n"):
