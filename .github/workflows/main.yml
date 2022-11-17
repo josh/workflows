@@ -1,0 +1,7 @@
+name: Main
+
+on: [push]
+
+jobs:
+  lint:
+    uses: .github/workflows/workflow-lint.yml

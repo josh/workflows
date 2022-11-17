@@ -1,7 +1,6 @@
 name: Workflow Lint
 
 on:
-  push:
   workflow_call:
     inputs:
       prettier:
