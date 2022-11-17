@@ -19,7 +19,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyyaml
+          pip install pyyaml black
 
       - name: Install Prettier
         run: npm install --global prettier
@@ -115,10 +115,7 @@ jobs:
 
       - name: Lint with shfmt
         run: |
-          read -a args <<< "$FILES"
-          ./shfmt --diff "${args[@]}"
-        env:
-          FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
+          ./shfmt --diff "$RUNNER_TEMP/workflows"
 
       - name: Lint with ShellCheck
         run: |
@@ -126,3 +123,7 @@ jobs:
           shellcheck "${args[@]}"
         env:
           FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
+
+      - name: Lint with black
+        run: |
+          black --check --diff "$RUNNER_TEMP/workflows"
