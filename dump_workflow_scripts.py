@@ -25,7 +25,9 @@ output_path = sys.argv[2]
 
 shutil.rmtree(output_path, ignore_errors=True)
 
-print("files<<EOF")
+output = open(os.environ["GITHUB_OUTPUT"], "w")
+
+output.write("files<<EOF\n")
 
 for workflow_filename in os.listdir(input_path):
     if not workflow_filename.endswith(".yml"):
@@ -59,7 +61,7 @@ for workflow_filename in os.listdir(input_path):
 
             filename = f"{job_dirname}/{step_id}.{extension}"
 
-            print(filename)
+            output.write(filename + "\n")
             with open(filename, "w") as f:
                 f.write(f"{shebang}\n")
                 if name:
@@ -69,4 +71,4 @@ for workflow_filename in os.listdir(input_path):
                 if not script.endswith("\n"):
                     f.write("\n")
 
-print("EOF")
+output.write("EOF\n")
