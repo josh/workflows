@@ -78,12 +78,6 @@ jobs:
               "sh": "#!/bin/sh -e",
           }
 
-          EXTENSIONS = {
-              "null": "bash",
-              "bash": "bash",
-              "sh": "sh",
-          }
-
           input_path = ".github/workflows"
           output_path = os.environ["RUNNER_TEMP"] + "/workflows"
 
@@ -109,12 +103,11 @@ jobs:
                           continue
 
                       shebang = SHEBANGS[shell]
-                      extension = EXTENSIONS[shell]
                       step_id = step.get("id", f"__run_{idx}")
                       name = step.get("name")
                       script = step.get("run")
 
-                      filename = f"{job_dirname}/{step_id}.{extension}"
+                      filename = f"{job_dirname}/{step_id}.sh"
                       print(filename)
 
                       with open(filename, "w") as f:
@@ -134,7 +127,7 @@ jobs:
       - name: Lint with ShellCheck
         if: ${{ inputs.shellcheck }}
         run: |
-          find "$RUNNER_TEMP/workflows" -type f \( -name '*.sh' -o -name '*.bash' \) -exec shellcheck {} +
+          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' -exec shellcheck {} +
 
   pylint:
     if: ${{ inputs.pylint }}
