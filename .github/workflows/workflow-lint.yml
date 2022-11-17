@@ -60,8 +60,7 @@ jobs:
       - name: Install shfmt
         if: ${{ inputs.shfmt }}
         run: |
-          gh release download --repo mvdan/sh --pattern 'shfmt_v*_linux_amd64'
-          mv shfmt_v*_linux_amd64 shfmt
+          wget -O shfmt https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64
           chmod +x shfmt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
