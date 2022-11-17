@@ -4,4 +4,4 @@ on: [push]
 
 jobs:
   lint:
-    uses: .github/workflows/workflow-lint.yml@main
+    uses: ./.github/workflows/workflow-lint.yml
