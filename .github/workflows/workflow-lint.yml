@@ -5,6 +5,18 @@ on:
   workflow_call:
 
 jobs:
+  prettier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Prettier
+        run: npm install --global prettier
+
+      - name: Lint with prettier
+        run: prettier --check ".github/workflows/*.yml"
+
   lint:
     runs-on: ubuntu-latest
 
@@ -21,9 +33,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml black
 
-      - name: Install Prettier
-        run: npm install --global prettier
-
       - name: Install shfmt
         run: |
           wget -O shfmt https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64
@@ -31,9 +40,6 @@ jobs:
 
       - name: Install ShellCheck
         run: sudo apt-get install shellcheck
-
-      - name: Lint with prettier
-        run: prettier --check ".github/workflows/*.yml"
 
       - name: Dump workflow commands to scripts
         id: dump_workflow_scripts
