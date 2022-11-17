@@ -46,6 +46,6 @@ jobs:
         run: ./shfmt --diff "$RUNNER_TEMP/workflows"
 
       - name: Lint with ShellCheck
-        run: shellcheck "$PATHS"
+        run: shellcheck $PATHS
         env:
           PATHS: ${{ steps.dump_workflow_scripts.outputs.paths }}
