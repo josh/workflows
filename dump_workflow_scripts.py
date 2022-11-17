@@ -57,7 +57,7 @@ for workflow_filename in os.listdir(input_path):
 
             filename = f"{job_dirname}/{step_id}.{extension}"
 
-            print(filename, file=sys.stderr)
+            print(filename)
             with open(filename, "w") as f:
                 f.write(f"{shebang}\n")
                 if name:
