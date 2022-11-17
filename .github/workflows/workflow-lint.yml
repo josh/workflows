@@ -61,10 +61,6 @@ jobs:
           input_path = ".github/workflows"
           output_path = os.environ["RUNNER_TEMP"] + "/workflows"
 
-          output = open(os.environ["GITHUB_OUTPUT"], "w")
-
-          output.write("files<<EOF\n")
-
           for workflow_filename in os.listdir(input_path):
               if not workflow_filename.endswith(".yml"):
                   continue
@@ -97,7 +93,6 @@ jobs:
 
                       filename = f"{job_dirname}/{step_id}.{extension}"
                       print(filename)
-                      output.write(filename + "\n")
 
                       with open(filename, "w") as f:
                           f.write(f"{shebang}\n")
@@ -108,19 +103,13 @@ jobs:
                           if not script.endswith("\n"):
                               f.write("\n")
 
-          output.write("EOF\n")
-          output.close()
-
       - name: Lint with shfmt
         run: |
           ./shfmt --diff "$RUNNER_TEMP/workflows"
 
       - name: Lint with ShellCheck
         run: |
-          read -a args <<<"$FILES"
-          shellcheck "${args[@]}"
-        env:
-          FILES: ${{ steps.dump_workflow_scripts.outputs.files }}
+          find "$RUNNER_TEMP/workflows" -type f \( -name '*.sh' -o -name '*.bash' \) | xargs shellcheck
 
       - name: Lint with black
         run: |
