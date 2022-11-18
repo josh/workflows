@@ -29,7 +29,7 @@ jobs:
 
       - name: Check files
         run: |
-          readarray files <"$RUNNER_TEMP/shell-files.txt"
+          readarray -t files <"$RUNNER_TEMP/shell-files.txt"
           shellcheck "${files[@]}"
 
   shfmt:
