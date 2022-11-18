@@ -137,7 +137,7 @@ jobs:
       - name: Lint with ShellCheck
         if: ${{ inputs.shellcheck }}
         run: |
-          readarray -d '' -t files < "$RUNNER_TEMP/workflows/files.txt"
+          readarray -d '' -t files <"$RUNNER_TEMP/workflows/files.txt"
           shellcheck "${files[@]}"
 
   pylint:
