@@ -127,7 +127,7 @@ jobs:
 
       - name: Generate file list
         run: |
-          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' -print0 >"$RUNNER_TEMP/workflows/files.txt"
+          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' -print0 >"$RUNNER_TEMP/workflow-files.txt"
 
       - name: Lint with shfmt
         if: ${{ inputs.shfmt }}
@@ -137,7 +137,7 @@ jobs:
       - name: Lint with ShellCheck
         if: ${{ inputs.shellcheck }}
         run: |
-          readarray -d '' -t files <"$RUNNER_TEMP/workflows/files.txt"
+          readarray -d '' -t files <"$RUNNER_TEMP/workflow-files.txt"
           shellcheck "${files[@]}"
 
   pylint:
