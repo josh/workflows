@@ -23,8 +23,14 @@ jobs:
       - name: Install ShellCheck
         run: sudo apt-get install shellcheck
 
+      - name: Generate shell file list
+        run: |
+          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' | tee "$RUNNER_TEMP/shell-files.txt"
+
       - name: Check files
-        run: shellcheck ./*.sh
+        run: |
+          readarray files <"$RUNNER_TEMP/shell-files.txt"
+          shellcheck "${files[@]}"
 
   shfmt:
     if: ${{ inputs.shfmt }}

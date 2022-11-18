@@ -125,9 +125,9 @@ jobs:
                           if not script.endswith("\n"):
                               f.write("\n")
 
-      - name: Generate file list
+      - name: Generate shell file list
         run: |
-          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' -print0 >"$RUNNER_TEMP/workflow-files.txt"
+          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' | tee "$RUNNER_TEMP/shell-files.txt"
 
       - name: Lint with shfmt
         if: ${{ inputs.shfmt }}
@@ -137,7 +137,7 @@ jobs:
       - name: Lint with ShellCheck
         if: ${{ inputs.shellcheck }}
         run: |
-          readarray -d '' -t files <"$RUNNER_TEMP/workflow-files.txt"
+          readarray files <"$RUNNER_TEMP/shell-files.txt"
           shellcheck "${files[@]}"
 
   pylint:
