@@ -133,7 +133,7 @@ jobs:
       - name: Lint with ShellCheck
         if: ${{ inputs.shellcheck }}
         run: |
-          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' -exec shellcheck {} +
+          find "$RUNNER_TEMP/workflows" -type f -name '*.sh' -print0 | xargs -0 shellcheck
 
   pylint:
     if: ${{ inputs.pylint }}
