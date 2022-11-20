@@ -123,9 +123,9 @@ jobs:
                               f.write(f"# name: {name}\n")
                           f.write("\n")
                           if env:
-                            for key in env:
-                              f.write(f'{key}=""\n')
-                            f.write("\n")
+                              for key in env:
+                                  f.write(f'{key}=""\n')
+                              f.write("\n")
                           f.write(script)
                           if not script.endswith("\n"):
                               f.write("\n")
