@@ -111,6 +111,7 @@ jobs:
                       shebang = SHEBANGS[shell]
                       step_id = step.get("id", f"__run_{idx}")
                       name = step.get("name")
+                      env = step.get("env")
                       script = step.get("run")
 
                       filename = f"{job_dirname}/{step_id}.sh"
@@ -121,6 +122,10 @@ jobs:
                           if name:
                               f.write(f"# name: {name}\n")
                           f.write("\n")
+                          if env:
+                            for key in env:
+                              f.write(f'{key}=""\n')
+                            f.write("\n")
                           f.write(script)
                           if not script.endswith("\n"):
                               f.write("\n")
