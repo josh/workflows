@@ -80,7 +80,7 @@ jobs:
           # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
           SHEBANGS = {
               "null": "#!/bin/bash -e",
-              "bash": "#!/bin/bash -eo pipefail",
+              "bash": "#!/bin/bash -e\nset -o pipefail",
               "sh": "#!/bin/sh -e",
           }
 
